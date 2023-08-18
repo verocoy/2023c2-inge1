@@ -23,9 +23,9 @@ o: unBooleano
 siEsFalso: aClosure 
 	^aClosure value! !
 
-!Falso class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:19:24'!
+!Falso class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:52:45'!
 siEsVerdadero: aClosure 
-	^nil! !
+	^self! !
 
 !Falso class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:03:34'!
 y: unBooleano 
@@ -53,9 +53,9 @@ no
 o: unBooleano 
 	^Verdadero! !
 
-!Verdadero class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:21:57'!
+!Verdadero class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:52:55'!
 siEsFalso: aClosure 
-	^nil! !
+	^self! !
 
 !Verdadero class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:17:32'!
 siEsVerdadero: aClosure 
@@ -119,18 +119,30 @@ test07VerdaderoOFalsoEsVerdadero
 test07VerdaderoOVerdaderoEsVerdadero
 	Assert that: (Verdadero o: Verdadero) isEqualTo: Verdadero! !
 
-!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:30:07'!
+!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:57:09'!
 test08FalsoSiEsVerdaderoNoEjecuta
-	Assert that: (Falso siEsVerdadero: ['Ejecuta']) isEqualTo: nil! !
+	|n1|
+	n1 := 0.
+	Falso siEsVerdadero: [n1:=1].
+	Assert that: n1 isEqualTo: 0! !
 
-!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:30:42'!
+!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:56:55'!
 test08VerdaderoSiEsVerdaderoEjecuta
-	Assert that: (Verdadero siEsVerdadero: ['Ejecuta']) isEqualTo: 'Ejecuta'! !
+	|n1|
+	n1 := 0.
+	Verdadero siEsVerdadero: [n1:=1].
+	Assert that: n1 isEqualTo: 1! !
 
-!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:31:02'!
+!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:55:44'!
 test09FalsoSiEsFalsoEjecuta
-	Assert that: (Falso siEsFalso: ['Ejecuta']) isEqualTo: 'Ejecuta'! !
+	|n1|
+	n1 := 0.
+	Falso siEsFalso: [n1:=1].
+	Assert that: n1 isEqualTo: 1! !
 
-!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:30:37'!
+!VerdaderoFalsoTest class methodsFor: 'as yet unclassified' stamp: 'VC 8/17/2023 21:56:30'!
 test09VerdaderoSiEsFalsoNoEjecuta
-	Assert that: (Verdadero siEsFalso: ['Ejecuta']) isEqualTo: nil! !
+	|n1|
+	n1 := 0.
+	Verdadero siEsFalso: [n1:=1].
+	Assert that: n1 isEqualTo: 0! !
