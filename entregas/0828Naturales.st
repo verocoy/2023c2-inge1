@@ -20,10 +20,11 @@ I class
 +aNaturalNumber
 	^aNaturalNumber next.! !
 
-!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 17:07:14'!
+!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 17:27:57'!
 - aNaturalNumber
-	^self
-	
+	aNaturalNumber  = I ifTrue: [^self previous].
+	^self previous - aNaturalNumber previous.
+
 	! !
 
 !I class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 17:05:21'!
@@ -46,7 +47,7 @@ next
 	! !
 
 
-!I class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!I class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -112,7 +113,7 @@ previous: aNaturalNumber
 	previous := aNaturalNumber.! !
 
 
-!II class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!II class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -179,7 +180,7 @@ previous: aNaturalNumber
 	previous := aNaturalNumber.! !
 
 
-!III class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!III class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -246,7 +247,7 @@ previous: aNaturalNumber
 	previous := aNaturalNumber.! !
 
 
-!IIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!IIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -313,7 +314,7 @@ previous: aNaturalNumber
 	previous := aNaturalNumber.! !
 
 
-!IIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!IIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -380,7 +381,7 @@ previous: aNaturalNumber
 	previous := aNaturalNumber.! !
 
 
-!IIIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:18:59'!
+!IIIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 17:29:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
