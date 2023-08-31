@@ -19,10 +19,27 @@ I class
 +aNaturalNumber
 	^aNaturalNumber next.! !
 
+!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:04:47'!
+-aNaturalNumber
+	^self error: self descripcionDeErrorDeNumerosNegativosNoSoportados ! !
+
+!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:12:56'!
+/aNaturalNumber
+	aNaturalNumber = self ifTrue: [^self].
+	^self error: self descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor! !
+
 !I class methodsFor: 'as yet unclassified' stamp: 'JA 8/25/2023 20:58:39'!
 < aNaturalNumber
 	aNaturalNumber = I ifTrue: [^false].
 	^true.! !
+
+!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:13:30'!
+descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
+	^'No puedo dividir por un numero mayor'! !
+
+!I class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:04:47'!
+descripcionDeErrorDeNumerosNegativosNoSoportados
+	^'No puedo restar'! !
 
 !I class methodsFor: 'as yet unclassified' stamp: 'BJGA 8/24/2023 21:18:31'!
 next
@@ -43,7 +60,7 @@ timesToDivide: aNaturalNumber
 	! !
 
 
-!I class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!I class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -77,8 +94,9 @@ II class
 
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 20:52:46'!
+!II class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:20:05'!
 / aNaturalNumber
+	self < aNaturalNumber ifTrue: [^self error: self descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor].
 	^aNaturalNumber timesToDivide: self! !
 
 !II class methodsFor: 'as yet unclassified' stamp: 'JA 8/25/2023 21:00:34'!
@@ -87,6 +105,10 @@ II class
 	self = I ifTrue: [^true].
 	^self previous < aNaturalNumber previous
 	! !
+
+!II class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:16:09'!
+descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
+	^'No puedo dividir por un numero mayor'! !
 
 !II class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 21:12:31'!
 next
@@ -109,13 +131,13 @@ restarseA: aNaturalNumber
 	^aNaturalNumber previous - self previous.
 ! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'VC 8/28/2023 20:58:22'!
+!II class methodsFor: 'as yet unclassified' stamp: 'VC 8/30/2023 21:07:45'!
 timesToDivide: aNaturalNumber
 	aNaturalNumber = self ifTrue: [^I].
-	^self timesToDivide: aNaturalNumber  - self.! !
+	^(self timesToDivide: aNaturalNumber  - self) next.! !
 
 
-!II class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!II class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -136,7 +158,7 @@ II subclass: #III
 III class
 	instanceVariableNames: ''!
 
-!III class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!III class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -157,7 +179,7 @@ II subclass: #IIII
 IIII class
 	instanceVariableNames: ''!
 
-!IIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!IIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -178,7 +200,7 @@ II subclass: #IIIII
 IIIII class
 	instanceVariableNames: ''!
 
-!IIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!IIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -199,7 +221,7 @@ II subclass: #IIIIII
 IIIIII class
 	instanceVariableNames: ''!
 
-!IIIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/28/2023 21:15:54'!
+!IIIIII class methodsFor: '--** private fileout/in **--' stamp: 'VC 8/30/2023 21:20:33'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
