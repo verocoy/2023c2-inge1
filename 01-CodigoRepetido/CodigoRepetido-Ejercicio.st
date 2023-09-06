@@ -21,18 +21,18 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:51:33'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:49:10'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
 
 	| customerBook |
 	
 	customerBook := CustomerBook new.
 	
-	self assertTimeOfExecute: [customerBook addCustomerNamed: 'John Lennon'.] 
-		isLessThan: 50 * millisecond	.
+	self assertExecutionTimeOf: [customerBook addCustomerNamed: 'John Lennon'.] 
+		takeLessThan: 50 * millisecond	.
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:51:41'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:54:08'!
 test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 
 	| customerBook paulMcCartney |
@@ -40,10 +40,10 @@ test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 	paulMcCartney := 'Paul McCartney'.
 	customerBook := self custumerBookWith1ClientNamed: paulMcCartney .
 
-	self assertTimeOfExecute: [customerBook removeCustomerNamed: paulMcCartney.] 
-		isLessThan: 100 * millisecond.! !
+	self assertExecutionTimeOf: [customerBook removeCustomerNamed: paulMcCartney.] 
+		takeLessThan: 100 * millisecond.! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:46:24'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:51:34'!
 test03CanNotAddACustomerWithEmptyName 
 
 	| customerBook |
@@ -53,9 +53,9 @@ test03CanNotAddACustomerWithEmptyName
 	self executeCollaboration: [ customerBook addCustomerNamed: ''.
 			self fail ] 
 		throwException:  Error
-		thenCheckExpectedResults: (self checkCustumerBookIsEmptyAfterAddACustumerWithEmptyName: customerBook).! !
+		thenAsserts: (self assertCustumerBookIsEmptyAfterAddACustumerWithEmptyName: customerBook).! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:46:10'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:51:34'!
 test04CanNotRemoveAnInvalidCustomer
 	
 	| customerBook johnLennon |
@@ -66,9 +66,9 @@ test04CanNotRemoveAnInvalidCustomer
 	self executeCollaboration:  [ customerBook removeCustomerNamed: 'Paul McCartney'.
 			self fail ]
 		throwException: NotFound
-		thenCheckExpectedResults: (self checkCustumerBook: customerBook hasOnly1ClientWhichNameIs: johnLennon)! !
+		thenAsserts: (self assertCustumerBook: customerBook hasClientNamed: johnLennon)! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 15:08:12'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:50:03'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -78,17 +78,17 @@ test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 	
 	customerBook suspendCustomerNamed: paulMcCartney.
 	
-	self checkCustumerBook: customerBook 
+	self assertInCustumerBook: customerBook 
 		numberOfActiveCustomers: 0 
 		numberOfSuspendedCustomers: 1 
 		numberOfCustomers:  1
-		isOrNot: [:collaboration | self assert: collaboration ]
-		customer: paulMcCartney.	
+		andHasOrNot: [:collaboration | self assert: collaboration ]
+		customerNamed: paulMcCartney.	
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 15:08:12'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:50:03'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -99,17 +99,17 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	customerBook suspendCustomerNamed: paulMcCartney.
 	customerBook removeCustomerNamed: paulMcCartney.
 	
-	self checkCustumerBook: customerBook 
+	self assertInCustumerBook: customerBook 
 		numberOfActiveCustomers: 0 
 		numberOfSuspendedCustomers: 0 
 		numberOfCustomers: 0 
-		isOrNot: [:collaboration|self deny: collaboration ]
-		customer: paulMcCartney .
+		andHasOrNot: [:aBoolean | self deny: aBoolean ]
+		customerNamed: paulMcCartney .
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:46:10'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:51:34'!
 test07CanNotSuspendAnInvalidCustomer
 	
 	| customerBook johnLennon |
@@ -120,9 +120,9 @@ test07CanNotSuspendAnInvalidCustomer
 	self executeCollaboration:  [ customerBook suspendCustomerNamed: 'George Harrison'.
 			self fail ]
 		throwException:  CantSuspend
-		thenCheckExpectedResults: (self checkCustumerBook: customerBook hasOnly1ClientWhichNameIs: johnLennon)! !
+		thenAsserts: (self assertCustumerBook: customerBook hasClientNamed: johnLennon)! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/5/2023 14:46:10'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'VC 9/6/2023 19:51:34'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook johnLennon |
@@ -135,7 +135,7 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	self executeCollaboration:  [ customerBook suspendCustomerNamed: johnLennon . 
 			self fail ]
 		throwException: CantSuspend
-		thenCheckExpectedResults: (self checkCustumerBook: customerBook hasOnly1ClientWhichNameIs: johnLennon)! !
+		thenAsserts: (self assertCustumerBook: customerBook hasClientNamed: johnLennon)! !
 
 
 !CustomerBookTest methodsFor: 'instance creation' stamp: 'VC 9/5/2023 10:15:35'!
@@ -146,8 +146,22 @@ custumerBookWith1ClientNamed: aName
 ! !
 
 
-!CustomerBookTest methodsFor: 'running time' stamp: 'VC 9/5/2023 13:56:23'!
-assertTimeOfExecute: aClosure isLessThan: maxTimeRunning
+!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/6/2023 19:42:18'!
+assertCustumerBook: aCustomerBook hasClientNamed: aName
+
+		^ [:anError |
+			self assert: aCustomerBook numberOfCustomers = 1.
+			self assert: (aCustomerBook includesCustomerNamed: aName).].! !
+
+!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/6/2023 19:49:33'!
+assertCustumerBookIsEmptyAfterAddACustumerWithEmptyName: customerBook
+
+	^ [ :anError | 
+			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
+			self assert: customerBook isEmpty ]! !
+
+!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/6/2023 19:49:10'!
+assertExecutionTimeOf: aClosure takeLessThan: maxTimeRunning
 
 	| millisecondsBeforeRunning millisecondsAfterRunning |
 		
@@ -159,16 +173,8 @@ assertTimeOfExecute: aClosure isLessThan: maxTimeRunning
 	
 ! !
 
-
-!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/5/2023 14:46:10'!
-checkCustumerBook: aCustomerBook hasOnly1ClientWhichNameIs: aName
-
-		^ [:anError |
-			self assert: aCustomerBook numberOfCustomers = 1.
-			self assert: (aCustomerBook includesCustomerNamed: aName).].! !
-
-!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/5/2023 15:08:12'!
-checkCustumerBook: aCustomerBook numberOfActiveCustomers: totalActiveCustumers numberOfSuspendedCustomers: totalSuspendedCustomers numberOfCustomers: totalCustumers isOrNot: aClosure customer: aName
+!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/6/2023 19:50:03'!
+assertInCustumerBook: aCustomerBook numberOfActiveCustomers: totalActiveCustumers numberOfSuspendedCustomers: totalSuspendedCustomers numberOfCustomers: totalCustumers andHasOrNot: aClosure customerNamed: aName
 
 	self assert: totalActiveCustumers equals: aCustomerBook numberOfActiveCustomers.
 	self assert: totalSuspendedCustomers equals: aCustomerBook numberOfSuspendedCustomers.
@@ -177,25 +183,9 @@ checkCustumerBook: aCustomerBook numberOfActiveCustomers: totalActiveCustumers n
 
 	! !
 
-!CustomerBookTest methodsFor: 'assertions' stamp: 'VC 9/5/2023 14:46:24'!
-checkCustumerBookIsEmptyAfterAddACustumerWithEmptyName: customerBook
 
-	^ [ :anError | 
-			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
-			self assert: customerBook isEmpty ]! !
-
-
-!CustomerBookTest methodsFor: 'exceptions' stamp: 'VC 9/5/2023 14:20:53'!
-executeCollaboration: method throwException: exception thenAssert: conditionAssert1 andAssert: conditionAssert2 
-
-	^ method
-		on: exception 
-		do: [ :anError | 
-			self assert: conditionAssert1.
-			self assert: conditionAssert2]! !
-
-!CustomerBookTest methodsFor: 'exceptions' stamp: 'VC 9/5/2023 14:15:00'!
-executeCollaboration: method throwException: exception thenCheckExpectedResults: conditionAssert 
+!CustomerBookTest methodsFor: 'exceptions' stamp: 'VC 9/6/2023 19:51:34'!
+executeCollaboration: method throwException: exception thenAsserts: conditionAssert 
 
 	^ method
 		on: exception 
@@ -250,29 +240,27 @@ numberOfSuspendedCustomers
 	
 	^suspended size! !
 
-!CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
+!CustomerBook methodsFor: 'customer management' stamp: 'VC 9/6/2023 19:17:22'!
 removeCustomerNamed: aName 
  
-	1 to: active size do: 
-	[ :index |
-		aName = (active at: index)
-			ifTrue: [
-				active removeAt: index.
-				^ aName 
-			] 
-	].
-
-	1 to: suspended size do: 	
-	[ :index |
-		aName = (suspended at: index)
-			ifTrue: [
-				suspended removeAt: index.
-				^ aName 
-			] 
-	].
-	
-	^ NotFound signal.
+	| aMessage | 
+	aMessage:= self removeFrom:  active customerNamed: aName errorIfNotFound: [NotFound signal].
+	aMessage:= self removeFrom: suspended customerNamed: aName errorIfNotFound: aMessage.
+	^aMessage value
 ! !
+
+!CustomerBook methodsFor: 'customer management' stamp: 'VC 9/6/2023 19:16:22'!
+removeFrom: aList customerNamed: aName errorIfNotFound: aMessage
+
+	1 to: aList size do: 
+	[ :index |
+		aName = (aList at: index)
+			ifTrue: [
+				aList removeAt: index.
+				^ [aName] 
+			] 
+	].
+	^ aMessage .! !
 
 !CustomerBook methodsFor: 'customer management' stamp: 'HernanWilkinson 7/6/2011 17:52'!
 signalCustomerAlreadyExists 
@@ -284,12 +272,10 @@ signalCustomerNameCannotBeEmpty
 
 	self error: self class customerCanNotBeEmptyErrorMessage ! !
 
-!CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
+!CustomerBook methodsFor: 'customer management' stamp: 'VC 9/6/2023 19:17:34'!
 suspendCustomerNamed: aName 
-	
-	(active includes: aName) ifFalse: [^CantSuspend signal].
-	
-	active remove: aName.
+
+	(self removeFrom: active customerNamed: aName errorIfNotFound:[^CantSuspend signal]) value. 		
 	
 	suspended add: aName
 ! !
