@@ -340,6 +340,47 @@ isZero
 
 	self subclassResponsibility ! !
 
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:53:52'!
+useAsAddendOfEntero: anEntero
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:09'!
+useAsAddendOfFraction: aFraccion
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:16'!
+useAsDivisorOfEntero: anEnteroAsDividend
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:22'!
+useAsDivisorOfFraccion: aFraccionAsDividend
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:28'!
+useAsFactorOfEntero: anEntero
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:35'!
+useAsFactorOfFraccion: aFraccion
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:41'!
+useAsSubtrahendOfEntero: anEnteroAsMinuend
+
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:54:47'!
+useAsSubtrahendOfFraccion: aFraccionAsMinuend
+
+	self subclassResponsibility! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Numero class' category: 'Numero-Exercise'!
