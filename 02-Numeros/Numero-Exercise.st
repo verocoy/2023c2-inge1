@@ -562,16 +562,51 @@ Entero class
 negativeFibonacciErrorDescription
 	^ ' Fibonacci no está definido aquí para Enteros Negativos!!!!!!'! !
 
-!Entero class methodsFor: 'instance creation' stamp: 'JAFET 9/10/2023 22:35:57'!
+!Entero class methodsFor: 'instance creation' stamp: 'VC 9/11/2023 21:16:11'!
 with: aValue 
 	
 	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
 	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
 	
-	aValue = 1 ifTrue: [ ^NeutroMultiplicacion new initializeOne ].
-	aValue = 0 ifTrue: [ ^NeutroSuma new initializeZero ].
+	aValue = 1 ifTrue: [ ^Uno new initializeOne ].
+	aValue = 0 ifTrue: [ ^Cero new initializeZero ].
 	aValue < 0 ifTrue: [ ^Negativo new initializeWith: aValue ].
 	^Positivo new initializeWith: aValue! !
+
+
+!classDefinition: #Cero category: 'Numero-Exercise'!
+Entero subclass: #Cero
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Cero methodsFor: 'arithmetic operations' stamp: 'JAFET 9/10/2023 21:50:33'!
+fibonacci
+
+	^Entero with: 1.! !
+
+
+!Cero methodsFor: 'initialization' stamp: 'JAFET 9/10/2023 22:02:43'!
+initializeZero
+	
+	value := 0! !
+
+
+!Cero methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:13'!
+checkDividendAndCreateFraccion: aDivisor
+	
+	^self! !
+
+!Cero methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:37'!
+checkDivisorAndCreateFraccion: aDividend
+	
+	^self class error: self class canNotDivideByZeroErrorDescription.! !
+
+!Cero methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:56:15'!
+createFraccion: aNumerator
+
+	^aNumerator! !
 
 
 !classDefinition: #Negativo category: 'Numero-Exercise'!
@@ -598,66 +633,6 @@ initializeWith: aValue
 	value := aValue! !
 
 
-!classDefinition: #NeutroMultiplicacion category: 'Numero-Exercise'!
-Entero subclass: #NeutroMultiplicacion
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!NeutroMultiplicacion methodsFor: 'arithmetic operations' stamp: 'JAFET 9/10/2023 21:50:13'!
-fibonacci
-
-	^Entero with: 1.! !
-
-
-!NeutroMultiplicacion methodsFor: 'initialization' stamp: 'JAFET 9/10/2023 22:02:32'!
-initializeOne
-	
-	value := 1! !
-
-
-!NeutroMultiplicacion methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 21:03:30'!
-createFraccion: aNumerator
-
-	^aNumerator ! !
-
-
-!classDefinition: #NeutroSuma category: 'Numero-Exercise'!
-Entero subclass: #NeutroSuma
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!NeutroSuma methodsFor: 'arithmetic operations' stamp: 'JAFET 9/10/2023 21:50:33'!
-fibonacci
-
-	^Entero with: 1.! !
-
-
-!NeutroSuma methodsFor: 'initialization' stamp: 'JAFET 9/10/2023 22:02:43'!
-initializeZero
-	
-	value := 0! !
-
-
-!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:13'!
-checkDividendAndCreateFraccion: aDivisor
-	
-	^self! !
-
-!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:37'!
-checkDivisorAndCreateFraccion: aDividend
-	
-	^self class error: self class canNotDivideByZeroErrorDescription.! !
-
-!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:56:15'!
-createFraccion: aNumerator
-
-	^aNumerator! !
-
-
 !classDefinition: #Positivo category: 'Numero-Exercise'!
 Entero subclass: #Positivo
 	instanceVariableNames: ''
@@ -680,6 +655,31 @@ fibonacci
 initializeWith: aValue 
 
 	value := aValue.! !
+
+
+!classDefinition: #Uno category: 'Numero-Exercise'!
+Entero subclass: #Uno
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Uno methodsFor: 'arithmetic operations' stamp: 'JAFET 9/10/2023 21:50:13'!
+fibonacci
+
+	^Entero with: 1.! !
+
+
+!Uno methodsFor: 'initialization' stamp: 'JAFET 9/10/2023 22:02:32'!
+initializeOne
+	
+	value := 1! !
+
+
+!Uno methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 21:03:30'!
+createFraccion: aNumerator
+
+	^aNumerator ! !
 
 
 !classDefinition: #Fraccion category: 'Numero-Exercise'!
