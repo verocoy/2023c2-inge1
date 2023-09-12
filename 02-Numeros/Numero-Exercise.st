@@ -642,24 +642,20 @@ initializeZero
 	value := 0! !
 
 
-!NeutroSuma methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 20:55:13'!
+!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:13'!
 checkDividendAndCreateFraccion: aDivisor
 	
 	^self! !
 
-!NeutroSuma methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 20:55:37'!
+!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:55:37'!
 checkDivisorAndCreateFraccion: aDividend
 	
 	^self class error: self class canNotDivideByZeroErrorDescription.! !
 
-!NeutroSuma methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 20:56:15'!
+!NeutroSuma methodsFor: 'fraccion creation' stamp: 'VC 9/11/2023 20:56:15'!
 createFraccion: aNumerator
 
 	^aNumerator! !
-
-!NeutroSuma methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 20:13:58'!
-with: aDividend over: aDivisor
-	! !
 
 
 !classDefinition: #Positivo category: 'Numero-Exercise'!
