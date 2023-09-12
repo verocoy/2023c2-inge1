@@ -374,16 +374,16 @@ useAsAddendOfFraction: aFraccion
 	"Fraccion + Entero"
 	^self + aFraccion.! !
 
-!Entero methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:40:30'!
-useAsDivisorOfEntero: anEntero
+!Entero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:45:58'!
+useAsDivisorOfEntero: anEnteroAsDividend
 	"Entero / Entero"
-	^Fraccion with: anEntero over: self.
+	^Fraccion with: anEnteroAsDividend over: self.
 ! !
 
-!Entero methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:29:52'!
-useAsDivisorOfFraccion: aFraccion
+!Entero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:46:40'!
+useAsDivisorOfFraccion: aFraccionAsDividend
 	"Fraccion / Entero"
-	^(aFraccion numerator / (aFraccion denominator * self))! !
+	^(aFraccionAsDividend numerator / (aFraccionAsDividend denominator * self))! !
 
 !Entero methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:40:54'!
 useAsFactorOfEntero: anEntero
@@ -403,15 +403,15 @@ useAsFactorOfFraccion: aFraccion
 	^self error: 'Estas intentando sumar una Fraccion con algo que no es un Entero ni un Fraccion.'
 "! !
 
-!Entero methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:29:56'!
-useAsSubtrahendOfEntero: anEntero
+!Entero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:47:10'!
+useAsSubtrahendOfEntero: anEnteroAsMinuend
 	"Entero - Entero"
-	^self class with: ((anEntero value integerValue) - value).! !
+	^self class with: ((anEnteroAsMinuend value integerValue) - value).! !
 
-!Entero methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:30:03'!
-useAsSubtrahendOfFraccion: aFraccion
+!Entero methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:48:07'!
+useAsSubtrahendOfFraccion: aFraccionAsMinuend
 	"Fraccion - Entero"
-	^(aFraccion numerator -  (self * aFraccion denominator)) / aFraccion denominator.
+	^(aFraccionAsMinuend numerator -  (self * aFraccionAsMinuend denominator)) / aFraccionAsMinuend denominator.
 	! !
 
 
@@ -835,15 +835,15 @@ useAsAddendOfFraction: aFraccion
 
 	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:30:53'!
-useAsDivisorOfEntero: anEntero
+!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:46:09'!
+useAsDivisorOfEntero: anEnteroAsDividend
 	"Entero / Fraccion"
-	^(anEntero * denominator) / numerator! !
+	^(anEnteroAsDividend * denominator) / numerator! !
 
-!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:30:57'!
-useAsDivisorOfFraccion: aFraccion
+!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:46:27'!
+useAsDivisorOfFraccion: aFraccionAsDividend
 	"Fraccion / Fraccion"
-	^(aFraccion numerator * denominator) / (aFraccion denominator * numerator)! !
+	^(aFraccionAsDividend numerator * denominator) / (aFraccionAsDividend denominator * numerator)! !
 
 !Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:36:45'!
 useAsFactorOfEntero: anEntero
@@ -855,19 +855,19 @@ useAsFactorOfFraccion: aFraccion
 	"Fraccion * Fraccion" 
 	^(aFraccion numerator * numerator) / (aFraccion denominator * denominator)! !
 
-!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:31:02'!
-useAsSubtrahendOfEntero: anEntero
+!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:47:21'!
+useAsSubtrahendOfEntero: anEnteroAsMinuend
 	"Entero - Fraccion"
-	^((anEntero * denominator) - numerator) / denominator.! !
+	^((anEnteroAsMinuend * denominator) - numerator) / denominator.! !
 
-!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'JAFET 9/10/2023 05:31:08'!
-useAsSubtrahendOfFraccion: aFraccion
+!Fraccion methodsFor: 'aux to arithmetic ops' stamp: 'VC 9/11/2023 21:47:37'!
+useAsSubtrahendOfFraccion: aFraccionAsMinuend
 	"Fraccion - Fraccion"
 	
 	| newNumerator newDenominator |
 
-	newNumerator := (aFraccion numerator * denominator) - (aFraccion denominator * numerator).
-	newDenominator := aFraccion denominator * denominator.
+	newNumerator := (aFraccionAsMinuend numerator * denominator) - (aFraccionAsMinuend denominator * numerator).
+	newDenominator := aFraccionAsMinuend denominator * denominator.
 	
 	^newNumerator / newDenominator! !
 
