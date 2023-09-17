@@ -139,10 +139,103 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 !classDefinition: #SentenceFinderByPrefixTest category: 'Stack-Exercise'!
 TestCase subclass: #SentenceFinderByPrefixTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'emptyStack prefix1 stackPrefix1 sentenceFinder sentencesPrefix1 stack5Elements sentences5Elements prefix2'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:00:35'!
+test01FindEmptyStackReturnsEmptyCollection
+
+	| sentences |
+	sentences := sentenceFinder findAllSentencesWith: prefix1 in: emptyStack.
+
+	self assert: sentences isEmpty! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:07:55'!
+test02FindReturnsCollection
+
+	| sentences |
+	sentences := sentenceFinder findAllSentencesWith: prefix1 in: stackPrefix1 .
+
+	self assert: (sentences isKindOf: OrderedCollection) ! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:08:43'!
+test03FindStack1ElementEqualPrefix
+
+	| sentences |
+	sentences := sentenceFinder findAllSentencesWith: prefix1 in: stackPrefix1 .
+
+	self assert: (sentences = sentencesPrefix1 )! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:09:32'!
+test04FindDifferentUsesOfPrefixInStack
+
+	| sentences |
+	sentences := sentenceFinder findAllSentencesWith: prefix1 in: stack5Elements .
+
+	self assert: (sentences = sentences5Elements )! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:13:04'!
+test05CanNotFindIfPrefixIsBlank
+
+	
+	self
+		should: [ sentenceFinder findAllSentencesWith: '' in: stack5Elements ]
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix blankPrefixErrorDescription ]
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 19:17:17'!
+test06CanNotFindIfPrefixHasSpace
+
+"	
+	self
+		should: [ sentenceFinder findAllSentencesWith: prefix2 in: stack5Elements ]
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix spacesInPrefixErrorDescription ]
+"! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'VC 9/17/2023 18:32:09'!
+test07CanNotFindIfPrefixIsNotString
+
+	
+	self
+		should: [ sentenceFinder findAllSentencesWith: 1 in: stack5Elements ]
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix notStringPrefixErrorDescription ]
+	! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'setUp' stamp: 'VC 9/17/2023 19:12:44'!
+setUp
+
+	sentenceFinder := SentenceFinderByPrefix new.
+
+	emptyStack := OOStack new.
+
+	prefix1 := 'hola'.
+	prefix2 := 'h́ola h'.
+	stackPrefix1 := OOStack new.
+	stackPrefix1 push: prefix1.
+	sentencesPrefix1 := OrderedCollection new.
+	sentencesPrefix1 addLast: prefix1.
+	
+	stack5Elements := OOStack new.
+	stack5Elements push: 'hola'.
+	stack5Elements push: 'hola chau'.
+	stack5Elements push: 	'Hola'.
+	stack5Elements push:  'hola hola'.
+	stack5Elements push: 	'chau hola'.
+	sentences5Elements := OrderedCollection new.
+	sentences5Elements addLast:  'hola hola'.
+	sentences5Elements addLast: 'hola chau'.
+	sentences5Elements addLast: 'hola'.
+	
+	! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -216,6 +309,7 @@ Object subclass: #OOStackElementContainer
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+
 !OOStackElementContainer methodsFor: 'accessing' stamp: 'VC 9/15/2023 13:13:37'!
 elementValue: aEmptyStack
 
@@ -228,6 +322,7 @@ OOStackElementContainer subclass: #StackBase
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
 
 !StackBase methodsFor: 'accessing' stamp: 'VC 9/15/2023 13:13:37'!
 elementValue: aEmptyStack
@@ -242,17 +337,17 @@ OOStackElementContainer subclass: #StackElementContainer
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StackElementContainer methodsFor: 'accessing' stamp: 'VC 9/15/2023 13:13:37'!
-elementValue: aStack
-
-	^ elementValue ! !
-
 
 !StackElementContainer methodsFor: 'initialization' stamp: 'VC 9/15/2023 13:01:45'!
 initializeWith: anElementValue
 
 	elementValue := anElementValue! !
 
+
+!StackElementContainer methodsFor: 'accessing' stamp: 'VC 9/15/2023 13:13:37'!
+elementValue: aStack
+
+	^ elementValue ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -272,3 +367,50 @@ Object subclass: #SentenceFinderByPrefix
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'operation' stamp: 'VC 9/17/2023 18:30:01'!
+findAllSentencesWith: aPrefix in: aSentenceStack
+
+	self shouldBeValidPrefix: aPrefix. 	
+	^self selectIf: [:sentence | sentence beginsWith: aPrefix] in: aSentenceStack ! !
+
+!SentenceFinderByPrefix methodsFor: 'operation' stamp: 'VC 9/17/2023 17:55:06'!
+selectIf: aConditionBlock in: aSentenceStack
+
+	| selectSentences sentence|
+	selectSentences := OrderedCollection new.
+	aSentenceStack isEmpty ifFalse: [
+		sentence := aSentenceStack pop.
+		selectSentences := self selectIf: aConditionBlock in: aSentenceStack .
+		(aConditionBlock value: sentence) ifTrue: [selectSentences addFirst: sentence ].
+		aSentenceStack push: sentence .
+		].
+	^selectSentences ! !
+
+
+!SentenceFinderByPrefix methodsFor: 'error handling' stamp: 'VC 9/17/2023 18:58:52'!
+shouldBeValidPrefix: aPrefix 
+
+	(aPrefix isKindOf: String) ifFalse: [^self error: self class notStringPrefixErrorDescription ].
+	aPrefix = '' ifTrue: [^self error: self class blankPrefixErrorDescription ].
+	aPrefix detect: [:character | character = Character space ] ifFound: [^self error: self class spacesInPrefixErrorDescription ]
+		ifNone: [ ].
+! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'error description' stamp: 'VC 9/17/2023 18:14:48'!
+blankPrefixErrorDescription
+	^ 'El prefijo no puede ser el string vacio'! !
+
+!SentenceFinderByPrefix class methodsFor: 'error description' stamp: 'VC 9/17/2023 18:28:08'!
+notStringPrefixErrorDescription
+	^ 'El prefijo debe ser string'! !
+
+!SentenceFinderByPrefix class methodsFor: 'error description' stamp: 'VC 9/17/2023 18:18:12'!
+spacesInPrefixErrorDescription
+	^ 'El prefijo no puede tener espacios'! !
