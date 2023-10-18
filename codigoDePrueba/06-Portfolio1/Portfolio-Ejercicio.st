@@ -453,60 +453,60 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #FinantialActive category: 'Portfolio-Ejercicio'!
-Object subclass: #FinantialActive
+!classDefinition: #FinantialAsset category: 'Portfolio-Ejercicio'!
+Object subclass: #FinantialAsset
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!FinantialActive methodsFor: 'balance' stamp: 'VC 10/18/2023 14:32:05'!
+!FinantialAsset methodsFor: 'balance' stamp: 'VC 10/18/2023 14:32:05'!
 balance
 
 	self subclassResponsibility! !
 
 
-!FinantialActive methodsFor: 'transactions' stamp: 'VC 10/18/2023 14:31:04'!
+!FinantialAsset methodsFor: 'transactions' stamp: 'VC 10/18/2023 14:31:04'!
 addTransactionsIn: aTransactionsList
 
 	self subclassResponsibility! !
 
-!FinantialActive methodsFor: 'transactions' stamp: 'VC 10/18/2023 14:32:23'!
+!FinantialAsset methodsFor: 'transactions' stamp: 'VC 10/18/2023 14:32:23'!
 transactions
 
 	self subclassResponsibility! !
 
 
-!FinantialActive methodsFor: 'testing' stamp: 'VC 10/18/2023 14:32:12'!
+!FinantialAsset methodsFor: 'testing' stamp: 'VC 10/18/2023 14:32:12'!
 hasRegistered: aTransaction
 
 	self subclassResponsibility! !
 
 
-!FinantialActive methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:32:38'!
+!FinantialAsset methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:32:38'!
 assertAssetMeetsCriteriaToBeAddIn: aParentPortfolio
 
 	self subclassResponsibility! !
 
-!FinantialActive methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:31:30'!
+!FinantialAsset methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:31:30'!
 assertAssetOf: aPortfolio doesNotIncludeTheAccountToAdd: anAccountToAdd
 
 	self subclassResponsibility! !
 
-!FinantialActive methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:32:56'!
+!FinantialAsset methodsFor: 'assertions' stamp: 'VC 10/18/2023 14:32:56'!
 assertAssetOf: aParentPortfolio doesNotIncludeThePortfolioToAdd: aPortfolioToAdd
 
 	self subclassResponsibility! !
 
 
-!FinantialActive methodsFor: 'associating' stamp: 'VC 10/18/2023 14:30:06'!
+!FinantialAsset methodsFor: 'associating' stamp: 'VC 10/18/2023 14:30:06'!
 addParentPortfolio: aParentPortfolio
 
 	self subclassResponsibility! !
 
 
 !classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
-FinantialActive subclass: #Portfolio
+FinantialAsset subclass: #Portfolio
 	instanceVariableNames: 'associateAssets parentPortfolios'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -629,7 +629,7 @@ portfolioAlreadyExistsErrorDescription
 
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
-FinantialActive subclass: #ReceptiveAccount
+FinantialAsset subclass: #ReceptiveAccount
 	instanceVariableNames: 'transactions'
 	classVariableNames: ''
 	poolDictionaries: ''
