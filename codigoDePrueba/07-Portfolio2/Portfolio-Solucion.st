@@ -318,6 +318,167 @@ test08TransferDecrecesBalanceOfSenderAccount
 ! !
 
 
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 11:20:03'!
+test12AccountSummaryHasBalanceZeroWhenAccountCreated
+
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	accountSummary := OrderedCollection with: 'Balance = 0'.
+		
+	self assert: accountSummary equals: account accountSummary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:15:55'!
+test13AccountSummaryWithDepositHasDepositAndBalance
+
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 on: account.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Depósito por 100.'.
+	accountSummary add: 'Balance = 100'.
+		
+	self assert: accountSummary equals: account accountSummary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:16:01'!
+test14AccountSummaryWithWithdrawHasWithdrawAndBalance
+
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Withdraw register: 100 on: account.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Extracción por 100.'.
+	accountSummary add: 'Balance = -100'.
+		
+	self assert: accountSummary equals: account accountSummary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:16:06'!
+test15AccountSummaryTransferSenderHasExpenseAndBalance
+
+	| senderAccount receiverAccount accountSummary |
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	Transfer from: senderAccount to: receiverAccount amount: 30.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Salida por transferencia de 30.'.
+	accountSummary add: 'Balance = -30'.
+		
+	self assert: accountSummary equals: senderAccount accountSummary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:16:10'!
+test16AccountSummaryReceiverHasIncomeAndBalance
+
+	| senderAccount receiverAccount accountSummary |
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	Transfer from: senderAccount to: receiverAccount amount: 30.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Entrada por transferencia de 30.'.
+	accountSummary add: 'Balance = 30'.
+		
+	self assert: accountSummary equals: receiverAccount accountSummary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:15:22'!
+test17AccountSummaryWithManyTransactions
+
+	| account1 account2 accountSummary account1Summary |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 20.
+	Transfer from: account2 to: account1 amount: 30.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Depósito por 100.'.
+	accountSummary add: 'Extracción por 50.'.
+	accountSummary add: 'Salida por transferencia de 20.'.
+	accountSummary add: 'Entrada por transferencia de 30.'.
+	accountSummary add: 'Balance = 60'.
+	
+	account1Summary := account1 accountSummary.
+
+	self assert: accountSummary equals: account1Summary.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:25:19'!
+test18TransferNetIsZeroWhenAccountCreated
+
+	| account |
+	
+	account := ReceptiveAccount new.
+		
+	self assert: 0 equals: account transferNet.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:29:48'!
+test19SenderAccountTransferNetDecrease
+
+	| senderAccount receiverAccount |
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	Transfer from: senderAccount to: receiverAccount amount: 30.
+		
+	self assert: -30 equals: senderAccount transferNet.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:43:26'!
+test20ReceiverAccountTransferNetIncrese
+
+	| senderAccount receiverAccount |
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	Transfer from: senderAccount to: receiverAccount amount: 50.
+		
+	self assert: 50 equals: receiverAccount transferNet.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:49:09'!
+test21AccountWithoutTransfersHasZeroAsTransferNet
+
+	| account |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 on: account.
+	Withdraw register: 50 on: account.
+		
+	self assert: 0 equals: account transferNet.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests - reports' stamp: 'VC 10/24/2023 13:52:53'!
+test22TransferNetWithManyTransactions
+
+
+	| account1 account2 |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 20.
+	Transfer from: account2 to: account1 amount: 30.
+
+		
+	self assert: 10 equals: account1 transferNet.
+! !
+
+
 !ReceptiveAccountTest methodsFor: 'tests - transfers' stamp: 'VC 10/20/2023 11:16:34'!
 test09TransferIncreceBalanceOfReceiverAccount
 
@@ -599,6 +760,26 @@ addedTo: aPortfolio
 	
 	! !
 
+
+!ReceptiveAccount methodsFor: 'reports' stamp: 'VC 10/24/2023 13:19:17'!
+accountSummary
+
+	| summaryList |
+	summaryList := OrderedCollection new.
+	transactions do: [
+		:transaction | summaryList add: transaction stringForSummary].
+	
+	summaryList add: ('Balance = ',self balance asString).
+	^summaryList ! !
+
+!ReceptiveAccount methodsFor: 'reports' stamp: 'VC 10/24/2023 14:04:05'!
+transferNet
+	| transferNet |
+	transferNet := 0.
+	transactions do: [:transaction | transferNet := transferNet + transaction valueForTransferNet.
+		].
+	^transferNet ! !
+
 
 !classDefinition: #AccountTransaction category: 'Portfolio-Solucion'!
 Object subclass: #AccountTransaction
@@ -615,6 +796,12 @@ affectBalance: aBalance
 
 !AccountTransaction methodsFor: 'initialization' stamp: 'VC 10/23/2023 19:31:14'!
 initializeFor: aTransactionDetail
+
+	self subclassResponsibility! !
+
+
+!AccountTransaction methodsFor: 'value' stamp: 'VC 10/24/2023 12:58:21'!
+value
 
 	self subclassResponsibility! !
 
@@ -671,6 +858,15 @@ affectBalance: aBalance
 
 	^aBalance + value ! !
 
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:20:11'!
+stringForSummary
+		^'Depósito por ',self value asString,'.'! !
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:05:45'!
+valueForTransferNet
+	^0! !
+
 
 !classDefinition: #Withdraw category: 'Portfolio-Solucion'!
 DirectAccountTransaction subclass: #Withdraw
@@ -683,6 +879,16 @@ DirectAccountTransaction subclass: #Withdraw
 affectBalance: aBalance
 
 	^aBalance - value! !
+
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:20:46'!
+stringForSummary
+	^'Extracción por ',self value asString,'.'
+! !
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:06:06'!
+valueForTransferNet
+	^0! !
 
 
 !classDefinition: #TransferAccountTransaction category: 'Portfolio-Solucion'!
@@ -703,6 +909,12 @@ initializeFor: aTransfer
 transfer
 	^transfer! !
 
+
+!TransferAccountTransaction methodsFor: 'value' stamp: 'VC 10/24/2023 12:59:02'!
+value
+	
+	^transfer amount! !
+
 
 !classDefinition: #DepositTransfer category: 'Portfolio-Solucion'!
 TransferAccountTransaction subclass: #DepositTransfer
@@ -715,6 +927,16 @@ TransferAccountTransaction subclass: #DepositTransfer
 affectBalance: aBalance
 
 	^aBalance + transfer amount.! !
+
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:22:13'!
+stringForSummary
+	^'Entrada por transferencia de ',self value asString,'.'
+! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:05:25'!
+valueForTransferNet
+	^self value! !
 
 
 !classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion'!
@@ -729,6 +951,16 @@ affectBalance: aBalance
 
 	^aBalance - transfer amount.! !
 
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:21:25'!
+stringForSummary
+	^'Salida por transferencia de ',self value asString,'.'! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:04:57'!
+valueForTransferNet
+	^self value negated
+! !
+
 
 !classDefinition: #Transfer category: 'Portfolio-Solucion'!
 Object subclass: #Transfer
@@ -737,9 +969,10 @@ Object subclass: #Transfer
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!Transfer methodsFor: 'initialization' stamp: 'VC 10/23/2023 18:35:06'!
+!Transfer methodsFor: 'amount' stamp: 'VC 10/23/2023 18:35:06'!
 amount
 	^amount.! !
+
 
 !Transfer methodsFor: 'initialization' stamp: 'VC 10/23/2023 18:51:22'!
 initializeFrom: aSenderAccount to: aReceiverAccount amount: anAmount 
