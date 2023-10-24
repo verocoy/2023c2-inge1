@@ -761,24 +761,126 @@ addedTo: aPortfolio
 	! !
 
 
-!ReceptiveAccount methodsFor: 'reports' stamp: 'VC 10/24/2023 13:19:17'!
+!ReceptiveAccount methodsFor: 'report' stamp: 'VC 10/24/2023 14:28:16'!
+accountSummary
+	^(AccountSummary of: self with: self transactions) accountSummary! !
+
+!ReceptiveAccount methodsFor: 'report' stamp: 'VC 10/24/2023 14:59:50'!
+transferNet
+	^(TransferNet of: self with: self transactions) transferNet! !
+
+
+!classDefinition: #AccountReport category: 'Portfolio-Solucion'!
+Object subclass: #AccountReport
+	instanceVariableNames: 'transactions account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!AccountReport methodsFor: 'initialization' stamp: 'VC 10/24/2023 15:05:40'!
+initializeOf: anAccount with: aTransactionsList
+	transactions := aTransactionsList.
+	account := anAccount.! !
+
+
+!AccountReport methodsFor: 'report' stamp: 'VC 10/24/2023 15:06:32'!
+reportDeposit: aDeposit
+
+	self subclassResponsibility! !
+
+!AccountReport methodsFor: 'report' stamp: 'VC 10/24/2023 15:06:36'!
+reportDepositTransfer: aDepositTransfer
+
+	self subclassResponsibility! !
+
+!AccountReport methodsFor: 'report' stamp: 'VC 10/24/2023 15:06:39'!
+reportWithdraw: aWithdraw
+
+	self subclassResponsibility! !
+
+!AccountReport methodsFor: 'report' stamp: 'VC 10/24/2023 15:06:43'!
+reportWithdrawTransfer: aWithdrawTransfer
+
+	self subclassResponsibility! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountReport class' category: 'Portfolio-Solucion'!
+AccountReport class
+	instanceVariableNames: ''!
+
+!AccountReport class methodsFor: 'instance creation' stamp: 'VC 10/24/2023 15:05:44'!
+of: anAccount with: aTransactionsList
+	^self new initializeOf: anAccount with: aTransactionsList! !
+
+
+!classDefinition: #AccountSummary category: 'Portfolio-Solucion'!
+AccountReport subclass: #AccountSummary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!AccountSummary methodsFor: 'evaluating' stamp: 'VC 10/24/2023 15:04:05'!
 accountSummary
 
 	| summaryList |
 	summaryList := OrderedCollection new.
 	transactions do: [
-		:transaction | summaryList add: transaction stringForSummary].
+		:transaction | summaryList add: (transaction report: self)].
 	
-	summaryList add: ('Balance = ',self balance asString).
+	summaryList add: ('Balance = ',account balance asString).
 	^summaryList ! !
 
-!ReceptiveAccount methodsFor: 'reports' stamp: 'VC 10/24/2023 14:04:05'!
+
+!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:09'!
+reportDeposit: aDeposit
+	^'Depósito por ',aDeposit value asString,'.'! !
+
+!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:18'!
+reportDepositTransfer: aDepositTransfer 
+	^'Entrada por transferencia de ',aDepositTransfer value asString,'.'! !
+
+!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:29'!
+reportWithdraw: aWithdraw
+	^'Extracción por ',aWithdraw value asString,'.'! !
+
+!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:38'!
+reportWithdrawTransfer: aWithdrawTransfer
+	^'Salida por transferencia de ',aWithdrawTransfer value asString,'.'! !
+
+
+!classDefinition: #TransferNet category: 'Portfolio-Solucion'!
+AccountReport subclass: #TransferNet
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!TransferNet methodsFor: 'evaluating' stamp: 'VC 10/24/2023 15:04:20'!
 transferNet
 	| transferNet |
 	transferNet := 0.
-	transactions do: [:transaction | transferNet := transferNet + transaction valueForTransferNet.
+	transactions do: [:transaction | transferNet := transferNet + (transaction report: self).
 		].
 	^transferNet ! !
+
+
+!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:54:26'!
+reportDeposit: aDeposit 
+	^0! !
+
+!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:11'!
+reportDepositTransfer: aDepositTransfer 
+	^aDepositTransfer value! !
+
+!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:41'!
+reportWithdraw: aWithdraw 
+	^0! !
+
+!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:55'!
+reportWithdrawTransfer: aWithdrawTransfer 
+	^aWithdrawTransfer value negated! !
 
 
 !classDefinition: #AccountTransaction category: 'Portfolio-Solucion'!
@@ -802,6 +904,12 @@ initializeFor: aTransactionDetail
 
 !AccountTransaction methodsFor: 'value' stamp: 'VC 10/24/2023 12:58:21'!
 value
+
+	self subclassResponsibility! !
+
+
+!AccountTransaction methodsFor: 'report' stamp: 'VC 10/24/2023 15:07:59'!
+report: anAccountReport
 
 	self subclassResponsibility! !
 
@@ -859,13 +967,9 @@ affectBalance: aBalance
 	^aBalance + value ! !
 
 
-!Deposit methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:20:11'!
-stringForSummary
-		^'Depósito por ',self value asString,'.'! !
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:05:45'!
-valueForTransferNet
-	^0! !
+!Deposit methodsFor: 'report' stamp: 'VC 10/24/2023 15:03:12'!
+report: anAccountReport 
+	^anAccountReport reportDeposit: self. ! !
 
 
 !classDefinition: #Withdraw category: 'Portfolio-Solucion'!
@@ -881,14 +985,9 @@ affectBalance: aBalance
 	^aBalance - value! !
 
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:20:46'!
-stringForSummary
-	^'Extracción por ',self value asString,'.'
-! !
-
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:06:06'!
-valueForTransferNet
-	^0! !
+!Withdraw methodsFor: 'report' stamp: 'VC 10/24/2023 15:03:29'!
+report: anAccountReport 
+	^anAccountReport reportWithdraw: self.! !
 
 
 !classDefinition: #TransferAccountTransaction category: 'Portfolio-Solucion'!
@@ -929,14 +1028,9 @@ affectBalance: aBalance
 	^aBalance + transfer amount.! !
 
 
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:22:13'!
-stringForSummary
-	^'Entrada por transferencia de ',self value asString,'.'
-! !
-
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:05:25'!
-valueForTransferNet
-	^self value! !
+!DepositTransfer methodsFor: 'report' stamp: 'VC 10/24/2023 15:03:41'!
+report: anAccountReport 
+	^anAccountReport reportDepositTransfer: self.! !
 
 
 !classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion'!
@@ -952,14 +1046,9 @@ affectBalance: aBalance
 	^aBalance - transfer amount.! !
 
 
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 13:21:25'!
-stringForSummary
-	^'Salida por transferencia de ',self value asString,'.'! !
-
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'VC 10/24/2023 14:04:57'!
-valueForTransferNet
-	^self value negated
-! !
+!WithdrawTransfer methodsFor: 'report' stamp: 'VC 10/24/2023 15:03:51'!
+report: anAccountReport 
+	^anAccountReport reportWithdrawTransfer: self.! !
 
 
 !classDefinition: #Transfer category: 'Portfolio-Solucion'!
