@@ -141,6 +141,17 @@ test11PortfolioCanNotIncludeAccountOfItsPortfolios
 			self assert: 1 equals: composedPortfolio accountsSize.
 			self assert: (composedPortfolio accountsIncludes: simplePortfolio) ]! !
 
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 13:51:22'!
+test12AccountSummaryHasBalanceZeroWhenPortfolioCreated
+
+	| portfolio accountSummary |
+	
+	portfolio := Portfolio new.
+	accountSummary := OrderedCollection with: 'Balance = 0'.
+		
+	self assert: accountSummary equals: portfolio accountSummary.
+! !
+
 !PortfolioTest methodsFor: 'tests' stamp: 'HAW 5/25/2019 11:58:32'!
 test12PortfolioCanNotIncludeItself
 
@@ -212,6 +223,167 @@ test15PortfolioCanNotIncludeAnyOfTheComposedAccountOfPortfolioToAdd
 		withExceptionDo: [ :anError | 
 			self assert: Portfolio canNotAddAccountErrorMessage equals: anError messageText.
 			self assert: portfolioToModify accountsIsEmpty ]! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 13:51:36'!
+test16AccountSummaryHasBalanceZeroWhenPortfolioCreated
+
+	| portfolio accountSummary |
+	
+	portfolio := Portfolio new.
+	accountSummary := OrderedCollection with: 'Balance = 0'.
+		
+	self assert: accountSummary equals: portfolio accountSummary.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:04:26'!
+test17AccountSummaryPortfolioWithAccountsHasAllTransactionsAndOneBalance
+
+	| portfolio account1 account2 accountSummary portfolioSummary |
+	
+	portfolio := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+
+	portfolio add: account1.
+	portfolio add: account2.
+
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 20.
+	Transfer from: account2 to: account1 amount: 30.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Depósito por 100.'.
+	accountSummary add: 'Extracción por 50.'.
+	accountSummary add: 'Salida por transferencia de 20.'.
+	accountSummary add: 'Entrada por transferencia de 30.'.
+	accountSummary add: 'Entrada por transferencia de 20.'.
+	accountSummary add: 'Salida por transferencia de 30.'.
+	accountSummary add: 'Balance = 50'.
+	
+	portfolioSummary := portfolio accountSummary.
+
+	self assert: accountSummary equals: portfolioSummary.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:09:22'!
+test18AccountSummaryPortfolioWithPortfoliosHasAllTransactionsAndOneBalance
+	"Paso de una este test"
+
+	| parentPortfolio portfolio1 portfolio2 account1 account2 accountSummary portfolioSummary |
+	
+	parentPortfolio := Portfolio new.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+
+	portfolio1 add: account1.
+	portfolio2 add: account2.
+	parentPortfolio add: portfolio1.
+	portfolio1 add: portfolio2.
+
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 20.
+	Transfer from: account2 to: account1 amount: 30.
+
+	accountSummary := OrderedCollection new.
+	accountSummary add: 'Depósito por 100.'.
+	accountSummary add: 'Extracción por 50.'.
+	accountSummary add: 'Salida por transferencia de 20.'.
+	accountSummary add: 'Entrada por transferencia de 30.'.
+	accountSummary add: 'Entrada por transferencia de 20.'.
+	accountSummary add: 'Salida por transferencia de 30.'.
+	accountSummary add: 'Balance = 50'.
+	
+	portfolioSummary := parentPortfolio accountSummary.
+
+	self assert: accountSummary equals: portfolioSummary.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:14:59'!
+test19TransferNetIsZeroWhenPortfolioCreated
+
+	| portfolio |
+	
+	portfolio := Portfolio new.
+		
+	self assert: 0 equals: portfolio transferNet.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:22:23'!
+test20TransferNetPortfolioWithAccountsHasSumOfAccountsTransferNet
+	"Pasó de una el test"
+
+	| portfolio account1 account2 account3 |
+	
+	portfolio := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	account3 := ReceptiveAccount new.
+
+	portfolio add: account1.
+	portfolio add: account2.
+
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 50. "account1 -50; account2 50"
+	Transfer from: account2 to: account1 amount: 30. "account1 -20; account2 20"
+	Transfer from: account3 to: account1 amount: 150. "account1 130; account2 20"
+
+	self assert: 150 equals: portfolio transferNet.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:25:10'!
+test21TransferNetPortfolioWithPortfoliosHasSumOfPortfoliosAndAccountsTransferNet
+	"Pasó de una el test"
+
+	| parentPortfolio portfolio1 portfolio2 account1 account2 account3 |
+	
+	parentPortfolio := Portfolio new.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	account3 := ReceptiveAccount new.
+	
+	portfolio1 add: account1 .
+	portfolio2 add: account2.
+	parentPortfolio add: portfolio1.
+	portfolio1 add: portfolio2.
+
+	Deposit register: 100 on:  account1.
+	Withdraw register: 50 on: account1.
+	Transfer from: account1 to: account2 amount: 50. "account1 -50; account2 50"
+	Transfer from: account2 to: account1 amount: 30. "account1 -20; account2 20"
+	Transfer from: account3 to: account1 amount: 150. "account1 130; account2 20"
+
+	self assert: 150 equals: parentPortfolio transferNet.
+! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:25:19'!
+test22StructureReportWorksForSinglePortfolio
+
+	| portfolio |
+	portfolio := Portfolio named: 'Portfolio unico'.
+	
+	self assert: (portfolio structure) equals: 'Portfolio unico'.! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'VC 10/25/2023 14:25:38'!
+test23StructureReportWorksForPortfolioWithOneAccount
+
+	| portfolio account expectedReport |
+	account := ReceptiveAccount named: 'Cuenta unica'.
+	portfolio := Portfolio named: 'Portfolio unico' with: account.
+	
+	expectedReport := 'Portfolio unico',String newLineString, String tab, 'Cuenta unica'.
+	
+	self assert: (portfolio structure) equals: expectedReport.! !
 
 
 !classDefinition: #ReceptiveAccountTest category: 'Portfolio-Solucion'!
@@ -304,8 +476,8 @@ test07AccountKnowsItsTransactions
 	self assert: (account1 transactions includes: deposit1).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'VC 10/20/2023 11:06:44'!
-test08TransferDecrecesBalanceOfSenderAccount
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JAFET 10/25/2023 04:13:31'!
+test08TransferDecreasesBalanceOfSenderAccount
 
 	| senderAccount receiverAccount |
 	
@@ -492,7 +664,7 @@ test09TransferIncreceBalanceOfReceiverAccount
 	self assert: 100 equals: receiverAccount balance.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests - transfers' stamp: 'VC 10/23/2023 19:42:30'!
+!ReceptiveAccountTest methodsFor: 'tests - transfers' stamp: 'JAFET 10/25/2023 04:26:01'!
 test10TransferKnowsTheAssociatesTransactions
 
 	| senderAccount receiverAccount transfer |
@@ -502,11 +674,11 @@ test10TransferKnowsTheAssociatesTransactions
 	
 	transfer := Transfer from: senderAccount to: receiverAccount amount: 100.
 	
-	self assert: (senderAccount lastTransaction) equals: transfer withdrawPata.
-	self assert: (receiverAccount lastTransaction) equals: transfer depositPata.
+	self assert: (senderAccount lastTransactionEquals: transfer withdrawPata).
+	self assert: (receiverAccount lastTransactionEquals: transfer depositPata).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests - transfers' stamp: 'VC 10/23/2023 19:56:47'!
+!ReceptiveAccountTest methodsFor: 'tests - transfers' stamp: 'JAFET 10/25/2023 04:27:47'!
 test11AssociatesTransferTransactionsKnowTheTrasfer
 
 	| senderAccount receiverAccount transfer |
@@ -516,8 +688,8 @@ test11AssociatesTransferTransactionsKnowTheTrasfer
 	
 	transfer := Transfer from: senderAccount to: receiverAccount amount: 100.
 	
-	self assert: (senderAccount lastTransaction) transfer equals: transfer.
-	self assert: (receiverAccount lastTransaction) transfer equals: transfer.
+	self assert: (senderAccount transferOfLastTransactionEquals: transfer).
+	self assert: (receiverAccount transferOfLastTransactionEquals: transfer).
 ! !
 
 
@@ -564,7 +736,7 @@ addedTo: aPortfolio
 
 !classDefinition: #Portfolio category: 'Portfolio-Solucion'!
 Account subclass: #Portfolio
-	instanceVariableNames: 'accounts parents'
+	instanceVariableNames: 'accounts parents name'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
@@ -604,11 +776,28 @@ rootParents
 	^ rootParents! !
 
 
-!Portfolio methodsFor: 'initialization' stamp: 'HAW 5/25/2019 12:03:18'!
+!Portfolio methodsFor: 'initialization' stamp: 'JAFET 10/25/2023 10:14:24'!
 initialize
 
 	accounts := OrderedCollection new.
-	parents := OrderedCollection new.! !
+	parents := OrderedCollection new.
+	name := self class defaultName.! !
+
+!Portfolio methodsFor: 'initialization' stamp: 'JAFET 10/25/2023 10:12:55'!
+initializeWithName: aName 
+
+	accounts := OrderedCollection new.
+	parents := OrderedCollection new.
+	name := aName.! !
+
+!Portfolio methodsFor: 'initialization' stamp: 'JAFET 10/25/2023 10:38:02'!
+initializeWithName: aName and: anAccount 
+	
+	accounts := OrderedCollection new.
+	parents := OrderedCollection new.
+	name := aName.
+	self add: anAccount.
+	! !
 
 
 !Portfolio methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:19:36'!
@@ -673,6 +862,27 @@ signalCanNotAddAccount
 	
 	self error: self class canNotAddAccountErrorMessage! !
 
+
+!Portfolio methodsFor: 'report-temp' stamp: 'VC 10/25/2023 13:34:26'!
+structure
+	| report |
+	report := name.
+	accounts do: [ :account | report := report, String newLineString, String tab, account name ].
+	^report! !
+
+
+!Portfolio methodsFor: 'report' stamp: 'VC 10/25/2023 13:53:24'!
+accountSummary
+	^(AccountSummary for: self) execute.! !
+
+!Portfolio methodsFor: 'report' stamp: 'VC 10/25/2023 14:03:53'!
+report: anAccountSummary 
+	accounts do: [:account | account report: anAccountSummary]! !
+
+!Portfolio methodsFor: 'report' stamp: 'VC 10/25/2023 14:15:43'!
+transferNet
+	^(TransferNet for: self) execute.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'Portfolio-Solucion'!
@@ -699,29 +909,46 @@ with: anAccount with: anotherAccount
 		add: anotherAccount;
 		yourself! !
 
+
+!Portfolio class methodsFor: 'class initialization' stamp: 'JAFET 10/25/2023 10:14:02'!
+defaultName 
+	^'Un portfolio cualquiera'.! !
+
+!Portfolio class methodsFor: 'class initialization' stamp: 'JAFET 10/25/2023 10:12:07'!
+named: aName 
+	^self new initializeWithName: aName.! !
+
+!Portfolio class methodsFor: 'class initialization' stamp: 'JAFET 10/25/2023 10:36:51'!
+named: aName with: anAccount 
+	^self new initializeWithName: aName and: anAccount.! !
+
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion'!
 Account subclass: #ReceptiveAccount
-	instanceVariableNames: 'transactions'
+	instanceVariableNames: 'transactions name'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:35'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'JAFET 10/25/2023 10:33:26'!
 initialize
 
 	super initialize.
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	name := self class defaultName.! !
+
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'JAFET 10/25/2023 10:35:03'!
+initializeWithName: aName
+
+	super initialize.
+	transactions := OrderedCollection new.
+	name := aName.! !
 
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HAW 5/25/2019 11:38:52'!
 addTransactionsTo: aCollectionOfTransactions
 
 	aCollectionOfTransactions addAll: transactions ! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'VC 10/23/2023 19:43:15'!
-lastTransaction
-	^transactions last.! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 register: aTransaction
@@ -754,6 +981,15 @@ isComposedBy: anAccount
 
 	^self = anAccount ! !
 
+!ReceptiveAccount methodsFor: 'testing' stamp: 'JAFET 10/25/2023 04:25:09'!
+lastTransactionEquals: aTransfer 
+	^transactions last = aTransfer.! !
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'JAFET 10/25/2023 09:50:15'!
+transferOfLastTransactionEquals: aTransfer
+	(transactions last isKindOf: TransferAccountTransaction) ifFalse: [^false].
+	^transactions last transfer = aTransfer.! !
+
 
 !ReceptiveAccount methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:03:32'!
 addedTo: aPortfolio 
@@ -761,27 +997,45 @@ addedTo: aPortfolio
 	! !
 
 
-!ReceptiveAccount methodsFor: 'report' stamp: 'VC 10/24/2023 14:28:16'!
+!ReceptiveAccount methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:44:40'!
 accountSummary
-	^(AccountSummary of: self with: self transactions) accountSummary! !
+	^(AccountSummary for: self) execute.! !
 
-!ReceptiveAccount methodsFor: 'report' stamp: 'VC 10/24/2023 14:59:50'!
+!ReceptiveAccount methodsFor: 'report' stamp: 'JAFET 10/25/2023 10:44:13'!
+name
+	^name.! !
+
+!ReceptiveAccount methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:31:22'!
+report: aReport
+	transactions do: [ :transaction | transaction report: aReport ].! !
+
+!ReceptiveAccount methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:44:26'!
 transferNet
-	^(TransferNet of: self with: self transactions) transferNet! !
+
+	^(TransferNet for: self) execute.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ReceptiveAccount class' category: 'Portfolio-Solucion'!
+ReceptiveAccount class
+	instanceVariableNames: ''!
+
+!ReceptiveAccount class methodsFor: 'class initialization' stamp: 'JAFET 10/25/2023 10:31:09'!
+named: aName
+	^self new initializeWithName: aName.! !
+
+
+!ReceptiveAccount class methodsFor: 'as yet unclassified' stamp: 'JAFET 10/25/2023 10:33:56'!
+defaultName 
+	^'Una cuenta cualquiera'.! !
 
 
 !classDefinition: #AccountReport category: 'Portfolio-Solucion'!
 Object subclass: #AccountReport
-	instanceVariableNames: 'transactions account'
+	instanceVariableNames: 'account'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
-
-!AccountReport methodsFor: 'initialization' stamp: 'VC 10/24/2023 15:05:40'!
-initializeOf: anAccount with: aTransactionsList
-	transactions := aTransactionsList.
-	account := anAccount.! !
-
 
 !AccountReport methodsFor: 'report' stamp: 'VC 10/24/2023 15:06:32'!
 reportDeposit: aDeposit
@@ -803,84 +1057,97 @@ reportWithdrawTransfer: aWithdrawTransfer
 
 	self subclassResponsibility! !
 
+
+!AccountReport methodsFor: 'initialization' stamp: 'VC 10/25/2023 14:09:49'!
+initializeFor: aReceptiveAccount
+
+	self subclassResponsibility! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'AccountReport class' category: 'Portfolio-Solucion'!
 AccountReport class
 	instanceVariableNames: ''!
 
-!AccountReport class methodsFor: 'instance creation' stamp: 'VC 10/24/2023 15:05:44'!
-of: anAccount with: aTransactionsList
-	^self new initializeOf: anAccount with: aTransactionsList! !
+!AccountReport class methodsFor: 'instance creation' stamp: 'JAFET 10/25/2023 09:42:19'!
+for: anAccount
+	^self new initializeFor: anAccount.! !
 
 
 !classDefinition: #AccountSummary category: 'Portfolio-Solucion'!
 AccountReport subclass: #AccountSummary
-	instanceVariableNames: ''
+	instanceVariableNames: 'summary'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!AccountSummary methodsFor: 'evaluating' stamp: 'VC 10/24/2023 15:04:05'!
-accountSummary
-
-	| summaryList |
-	summaryList := OrderedCollection new.
-	transactions do: [
-		:transaction | summaryList add: (transaction report: self)].
+!AccountSummary methodsFor: 'evaluating' stamp: 'JAFET 10/25/2023 09:46:08'!
+execute
 	
-	summaryList add: ('Balance = ',account balance asString).
-	^summaryList ! !
+	account report: self.
+	summary add: 'Balance = ', account balance asString.
+	
+	^summary.! !
 
 
-!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:09'!
+!AccountSummary methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:42:57'!
 reportDeposit: aDeposit
-	^'Depósito por ',aDeposit value asString,'.'! !
+	summary add: ('Depósito por ', aDeposit value asString,'.').! !
 
-!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:18'!
+!AccountSummary methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:43:26'!
 reportDepositTransfer: aDepositTransfer 
-	^'Entrada por transferencia de ',aDepositTransfer value asString,'.'! !
+	summary add: 	'Entrada por transferencia de ', aDepositTransfer value asString,'.'! !
 
-!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:29'!
+!AccountSummary methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:43:39'!
 reportWithdraw: aWithdraw
-	^'Extracción por ',aWithdraw value asString,'.'! !
+	summary add: ('Extracción por ', aWithdraw value asString,'.').! !
 
-!AccountSummary methodsFor: 'report' stamp: 'VC 10/24/2023 15:01:38'!
+!AccountSummary methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:43:53'!
 reportWithdrawTransfer: aWithdrawTransfer
-	^'Salida por transferencia de ',aWithdrawTransfer value asString,'.'! !
+	summary add: ('Salida por transferencia de ', aWithdrawTransfer value asString,'.').! !
+
+
+!AccountSummary methodsFor: 'initialization' stamp: 'VC 10/25/2023 14:10:03'!
+initializeFor: anAccount
+ 
+	account := anAccount.
+	summary := OrderedCollection new.! !
 
 
 !classDefinition: #TransferNet category: 'Portfolio-Solucion'!
 AccountReport subclass: #TransferNet
-	instanceVariableNames: ''
+	instanceVariableNames: 'transferNetValue'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!TransferNet methodsFor: 'evaluating' stamp: 'VC 10/24/2023 15:04:20'!
-transferNet
-	| transferNet |
-	transferNet := 0.
-	transactions do: [:transaction | transferNet := transferNet + (transaction report: self).
-		].
-	^transferNet ! !
+!TransferNet methodsFor: 'evaluating' stamp: 'JAFET 10/25/2023 09:36:17'!
+execute
+	account report: self.
+	
+	^transferNetValue.! !
 
 
-!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:54:26'!
-reportDeposit: aDeposit 
-	^0! !
+!TransferNet methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:36:31'!
+reportDeposit: aDeposit ! !
 
-!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:11'!
+!TransferNet methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:36:49'!
 reportDepositTransfer: aDepositTransfer 
-	^aDepositTransfer value! !
+	transferNetValue := transferNetValue + aDepositTransfer value! !
 
-!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:41'!
-reportWithdraw: aWithdraw 
-	^0! !
+!TransferNet methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:36:35'!
+reportWithdraw: aWithdraw ! !
 
-!TransferNet methodsFor: 'report' stamp: 'VC 10/24/2023 14:55:55'!
+!TransferNet methodsFor: 'report' stamp: 'JAFET 10/25/2023 09:36:58'!
 reportWithdrawTransfer: aWithdrawTransfer 
-	^aWithdrawTransfer value negated! !
+	transferNetValue := transferNetValue + aWithdrawTransfer value negated! !
+
+
+!TransferNet methodsFor: 'initialization' stamp: 'VC 10/25/2023 14:10:16'!
+initializeFor: anAccount
+ 
+	account := anAccount.
+	transferNetValue := 0.! !
 
 
 !classDefinition: #AccountTransaction category: 'Portfolio-Solucion'!
